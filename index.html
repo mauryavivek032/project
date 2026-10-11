@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#064c3b">
+  <title>Waste2Power — Smart Waste & Energy</title>
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="splash-screen" id="splashScreen" aria-label="Waste2Power loading">
+  <div class="splash-orbit"><span>ϟ</span></div><h1>Waste<span>2</span>Power</h1><p>Less Waste. More Energy.</p><div class="splash-progress"><i></i></div>
+</div>
+<div class="login-screen" id="loginScreen" hidden>
+  <form class="login-card" id="loginForm" aria-labelledby="authTitle" autocomplete="off">
+    <div class="login-mark">ϟ</div>
+    <h2 id="authTitle">Welcome to Waste<span>2</span>Power</h2>
+    <p>Enter your name to start. Your dashboard and waste log are saved under your name on this device.</p>
+    <label for="loginName">Your name</label>
+    <input id="loginName" type="text" minlength="2" maxlength="30" required placeholder="e.g. Vivek Maurya" autocomplete="name">
+    <small class="login-error" id="loginError" role="alert" aria-live="polite"></small>
+    <button class="btn btn-primary wide-btn" id="loginBtn" type="submit">Continue <span>→</span></button>
+    <small class="login-note">Simple sign-in: no password and no internet account needed. Anyone using this device can enter any name.</small>
+  </form>
+</div>
+<div class="app-shell" id="appShell" hidden>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#" data-page="dashboard" aria-label="Waste2Power home">
+      <span class="brand-mark">ϟ</span>
+      <span><b>Waste<span class="brand-2">2</span>Power</b><small>Less Waste. More Energy.</small></span>
+    </a>
+    <nav class="nav-list" aria-label="Main navigation">
+      <button class="nav-link active" data-page="dashboard"><span>⌂</span> Dashboard</button>
+      <button class="nav-link" data-page="scan"><span>▣</span> Scan Waste</button>
+      <button class="nav-link" data-page="waste"><span>♻</span> My Waste</button>
+      <button class="nav-link" data-page="impact"><span>ϟ</span> Energy & Impact</button>
+      <button class="nav-link" data-page="route"><span>⌁</span> Collection Route</button>
+      <button class="nav-link" data-page="marketplace"><span>♧</span> Seller Marketplace</button>
+      <button class="nav-link" data-page="ewaste"><span>▣</span> E-Waste Guide</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="earth-art">🌍</div>
+      <p>Small actions<br>make a big impact.</p>
+      <span class="demo-pill">DEMO PROTOTYPE</span>
+      <button class="logout-btn" id="logoutBtn" type="button" hidden>Log out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">☰</button>
+      <div>
+        <h1 id="pageTitle">Hello 👋</h1>
+        <p id="pageSubtitle">Let's turn waste into a better tomorrow.</p>
+      </div>
+      <div class="campus-chip"><span class="pin">●</span><span><b>Campus Green Hub</b><small>Waste & energy workspace</small></span></div>
+      <div class="avatar" id="userAvatar" title="Profile">?</div>
+    </header>
+
+    <section class="page active-page" id="page-dashboard">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">SMART WASTE • SMARTER FUTURE</span>
+          <h2>Track your waste.<br>Unlock its <em>energy.</em></h2>
+          <p>One simple place to classify waste, explore responsible disposal options, and estimate environmental impact.</p>
+          <p class="impact-line" id="impactLine"></p>
+          <button class="btn btn-lime" data-go="scan">Scan waste <span>→</span></button>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="globe">🌎</div><span class="leaf leaf-a">🌿</span><span class="leaf leaf-b">🍃</span>
+          <div class="hero-sticker">REDUCE<br>REUSE<br>RECYCLE</div>
+        </div>
+      </section>
+
+      <div class="stat-grid">
+        <article class="stat-card"><div class="stat-icon icon-green">♻</div><div><span>Total waste logged</span><strong id="statWaste">12.5 kg</strong><small class="positive">Your tracked materials</small></div></article>
+        <article class="stat-card"><div class="stat-icon icon-yellow">ϟ</div><div><span>Estimated energy potential</span><strong id="statEnergy">8.4 kWh</strong><small class="positive">Indicative estimate</small></div></article>
+        <article class="stat-card"><div class="stat-icon icon-mint">₹</div><div><span>Potential value</span><strong id="statValue">₹ 320</strong><small class="positive">Illustrative estimate</small></div></article>
+        <article class="stat-card"><div class="stat-icon icon-leaf">❧</div><div><span>Waste entries</span><strong id="statEntries">4</strong><small class="positive">Items recorded</small></div></article>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="panel composition-panel">
+          <div class="panel-heading"><div><h3>Waste composition</h3><p>Based on your logged items</p></div><span class="tiny-tag">LIVE DEMO</span></div>
+          <div class="composition-content"><div class="donut" id="donut"><div><b id="donutTotal">12.5</b><small>kg total</small></div></div><div class="legend" id="legend"></div></div>
+        </article>
+        <article class="panel recommendation-panel">
+          <div class="panel-heading"><div class="bulb">✦</div><div><h3>Smart recommendation</h3><p>Practical next step</p></div></div>
+          <h4 id="recommendationTitle">Keep food waste separate</h4>
+          <p id="recommendationText">Clean organic waste may be suitable for composting or a local biogas programme. Check local facilities before disposal.</p>
+          <button class="btn btn-dark" data-go="ewaste">Explore disposal guide <span>→</span></button>
+        </article>
+        <article class="panel activity-panel">
+          <div class="panel-heading"><div><h3>Recent activity</h3><p>Latest waste entries</p></div><button class="text-btn" data-go="waste">View all →</button></div>
+          <div id="recentActivity" class="activity-list"></div>
+        </article>
+      </div>
+      <section class="eco-panel" aria-label="Your eco score">
+        <div class="eco-left">
+          <span class="eyebrow green-text">YOUR ECO SCORE</span>
+          <div class="eco-level"><span class="eco-emoji" id="ecoEmoji">🌱</span><div><strong id="ecoLevel">Seedling</strong><small id="ecoNext"></small></div></div>
+          <div class="eco-points"><b id="ecoPoints">0</b><span>eco points</span></div>
+          <div class="eco-bar" role="progressbar" aria-label="Progress to next level"><i id="ecoBar"></i></div>
+          <button class="btn btn-dark" id="shareCardBtn" type="button">⬇ Download my impact card</button>
+        </div>
+        <div class="eco-right">
+          <h4>Badges <small id="badgeCount"></small></h4>
+          <div class="badge-grid" id="badgeGrid"></div>
+        </div>
+      </section>
+      <article class="panel awareness-panel" aria-label="Environment and energy awareness">
+        <div class="awareness-icon" aria-hidden="true">🌱⚡</div>
+        <div class="awareness-copy">
+          <span class="eyebrow green-text">AWARENESS · जागरूकता</span>
+          <p lang="en">Clean environment, clean energy. Sorting waste cuts pollution, saves natural resources and can turn waste into power. Recycle, reuse and save electricity today, so tomorrow stays healthy and bright for everyone.</p>
+          <p lang="hi">स्वच्छ पर्यावरण, स्वच्छ ऊर्जा। कचरा अलग करने से प्रदूषण घटता है, संसाधन बचते हैं और कचरे से बिजली बन सकती है। रीसायकल करें, दोबारा उपयोग करें, बिजली बचाएँ।</p>
+        </div>
+      </article>
+      <p class="disclaimer">Prototype note: dashboard starts with sample data. Energy and value figures are illustrative estimates, not measured or verified outcomes.</p>
+    
+      <section class="awareness" aria-label="Environment and energy awareness">
+        <div class="aw-glow" aria-hidden="true"></div>
+        <span class="aw-eyebrow">🌍 ENVIRONMENT &amp; ENERGY AWARENESS</span>
+        <p class="aw-main" lang="en">Every item you sort <b>saves energy</b>, protects our <b>air, water and soil</b>, and keeps our families healthy. Small habits power a <em>greener future</em>. Reduce, reuse, recycle, and turn waste into power!</p>
+        <div class="aw-chips" aria-label="Explore environmental topics">
+          <button type="button" data-page="save-energy">⚡ Save energy <span aria-hidden="true">↗</span></button>
+          <button type="button" data-page="clean-water">💧 Clean water <span aria-hidden="true">↗</span></button>
+          <button type="button" data-page="healthy-soil">🌿 Healthy soil <span aria-hidden="true">↗</span></button>
+          <button type="button" data-page="fresh-air">🌬️ Fresh air <span aria-hidden="true">↗</span></button>
+        </div>
+        <p class="aw-hindi" lang="hi">हर कचरे को सही तरह अलग करने से ऊर्जा बचती है, हवा, पानी और मिट्टी सुरक्षित रहती है और हमारा परिवार स्वस्थ रहता है। छोटी आदतें, हरा-भरा कल। कम करें, दोबारा उपयोग करें, रीसायकल करें!</p>
+      </section>
+    </section>
+
+
+    <section class="page environment-page" id="page-clean-water">
+      <div class="section-intro"><span class="eyebrow green-text">ENVIRONMENT GUIDE · 01</span><h2>💧 Clean Water</h2><p>How responsible waste habits help protect rivers, lakes and groundwater.</p></div>
+      <div class="audio-guide-controls"><button type="button" class="btn btn-dark hindi-audio-btn" data-audio="clean-water" aria-label="सुनें: स्वच्छ पानी">🔊 सुनें: स्वच्छ पानी</button><button type="button" class="btn btn-outline hindi-audio-stop" data-audio-stop hidden>⏹ रोकें</button><span class="audio-guide-status" aria-live="polite"></span></div>
+      <article class="panel environment-hero water-hero"><div class="environment-symbol">💧</div><div><span class="tiny-tag">WHY IT MATTERS</span><h3>Water is a shared resource</h3><p>Clean water is essential for drinking, cooking, growing food and keeping ecosystems alive. Waste that is dumped on roads, in drains or near water bodies can be carried by rain into rivers and lakes. Some batteries, electronics, oils, paints and chemical containers may release harmful substances if handled badly. Plastic waste can break into smaller pieces and persist in the environment.</p></div></article>
+      <div class="environment-content-grid"><article class="panel"><h3>What you can do</h3><ul class="environment-list"><li><b>Separate waste at source.</b> Keep recyclables, wet waste and hazardous items in different containers.</li><li><b>Never pour oil or chemicals into drains.</b> Follow local disposal instructions for paints, cleaners and automotive fluids.</li><li><b>Keep e-waste and batteries out of regular bins.</b> Use an authorised collection or take-back service.</li><li><b>Reduce plastic litter.</b> Carry a reusable bottle and bag, and put wrappers in a bin.</li><li><b>Prevent drain blockages.</b> Do not throw food scraps, wipes or packaging into street drains.</li></ul></article><article class="panel action-panel"><h3>Waste2Power action</h3><p>Use Scan Waste to identify an item, then check the disposal guidance before you throw it away. Keep hazardous materials separate and contact a suitable collection service.</p><div class="action-note">Small habit: carry a reusable water bottle and dispose of waste responsibly.</div><button class="btn btn-dark" data-go="scan">Scan an item →</button></article></div>
+      <p class="disclaimer">This page provides general awareness, not water-quality testing. Never assume water is safe to drink based on appearance alone.</p>
+    </section>
+
+    <section class="page environment-page" id="page-save-energy">
+      <div class="section-intro"><span class="eyebrow green-text">ENVIRONMENT GUIDE · 02</span><h2>⚡ Save Energy</h2><p>Use electricity thoughtfully and understand how reuse and recycling can reduce resource demand.</p></div>
+      <div class="audio-guide-controls"><button type="button" class="btn btn-dark hindi-audio-btn" data-audio="save-energy" aria-label="सुनें: ऊर्जा बचाएँ">🔊 सुनें: ऊर्जा बचाएँ</button><button type="button" class="btn btn-outline hindi-audio-stop" data-audio-stop hidden>⏹ रोकें</button><span class="audio-guide-status" aria-live="polite"></span></div>
+      <article class="panel environment-hero energy-hero"><div class="environment-symbol">⚡</div><div><span class="tiny-tag">WHY IT MATTERS</span><h3>Energy saved is energy we do not need to generate</h3><p>Producing electricity and manufacturing new products require resources. Reusing a working device or repairing an item can extend its life and reduce demand for new materials. Recycling properly sorted materials can also reduce the need to extract and process some raw materials, although the energy benefit depends on the material and recycling process. Waste-to-energy is not suitable for every waste type, and recycling should not be confused with burning waste in the open.</p></div></article>
+      <div class="environment-content-grid"><article class="panel"><h3>Everyday energy-saving habits</h3><ul class="environment-list"><li><b>Switch off unused devices.</b> Turn off lights, fans and chargers when they are not needed.</li><li><b>Choose efficient settings.</b> Use power-saving mode and sensible screen brightness on phones and laptops.</li><li><b>Repair before replacing.</b> Get a device checked by a qualified technician if repair is safe and practical.</li><li><b>Reuse or donate working items.</b> Clear personal data first and pass devices to a trusted recipient.</li><li><b>Recycle correctly.</b> Send end-of-life electronics to an authorised collection or recycling channel.</li></ul></article><article class="panel action-panel"><h3>Waste2Power action</h3><p>Log materials in Scan Waste and explore the Energy & Impact dashboard. Any energy values shown in this demo are estimates for learning—not measured electricity savings or a guaranteed power output.</p><div class="action-note">Small habit: enable power-saving mode and switch off lights when leaving a room.</div><button class="btn btn-dark" data-go="impact">View Energy & Impact →</button></article></div>
+      <p class="disclaimer">Actual energy savings depend on the device, material, local recycling system and process used.</p>
+    </section>
+
+    <section class="page environment-page" id="page-healthy-soil">
+      <div class="section-intro"><span class="eyebrow green-text">ENVIRONMENT GUIDE · 03</span><h2>🌿 Healthy Soil</h2><p>Keep soil productive by preventing litter and managing organic waste well.</p></div>
+      <div class="audio-guide-controls"><button type="button" class="btn btn-dark hindi-audio-btn" data-audio="healthy-soil" aria-label="सुनें: स्वस्थ मिट्टी">🔊 सुनें: स्वस्थ मिट्टी</button><button type="button" class="btn btn-outline hindi-audio-stop" data-audio-stop hidden>⏹ रोकें</button><span class="audio-guide-status" aria-live="polite"></span></div>
+      <article class="panel environment-hero soil-hero"><div class="environment-symbol">🌿</div><div><span class="tiny-tag">WHY IT MATTERS</span><h3>Healthy soil supports plants and life</h3><p>Soil helps plants grow, stores water and provides habitat for many organisms. When mixed waste is dumped on land, plastics and other persistent materials can remain for a long time. Some electronic components, batteries and chemical products may contaminate soil if they are damaged or disposed of improperly. Food and garden scraps, on the other hand, can often be composted when they are collected separately and managed correctly.</p></div></article>
+      <div class="environment-content-grid"><article class="panel"><h3>Protect the soil</h3><ul class="environment-list"><li><b>Separate wet waste.</b> Keep fruit peels, vegetable scraps and suitable garden waste apart from plastic and metal.</li><li><b>Compost suitable organics.</b> Use a properly managed home or community compost system and follow local guidance.</li><li><b>Keep hazardous items separate.</b> Batteries, electronics, oils and chemicals should not go into compost or ordinary soil.</li><li><b>Reduce litter.</b> Use bins and keep wrappers, glass and broken items away from gardens and open land.</li><li><b>Reuse materials where practical.</b> Repair or donate usable goods rather than discarding them too early.</li></ul></article><article class="panel action-panel"><h3>Waste2Power action</h3><p>Choose Organic when logging clean food scraps, and follow the composting or local collection guidance. Keep contaminated or unknown materials separate until a suitable handler advises you.</p><div class="action-note">Small habit: collect fruit and vegetable scraps separately for suitable composting.</div><button class="btn btn-dark" data-go="scan">Log waste →</button></article></div>
+      <p class="disclaimer">Do not compost batteries, e-waste, treated wood, chemicals, or materials contaminated with unknown substances.</p>
+    </section>
+
+    <section class="page environment-page" id="page-fresh-air">
+      <div class="section-intro"><span class="eyebrow green-text">ENVIRONMENT GUIDE · 04</span><h2>🌬️ Fresh Air</h2><p>Reduce avoidable air pollution by choosing safer waste handling and cleaner everyday habits.</p></div>
+      <div class="audio-guide-controls"><button type="button" class="btn btn-dark hindi-audio-btn" data-audio="fresh-air" aria-label="सुनें: ताज़ी हवा">🔊 सुनें: ताज़ी हवा</button><button type="button" class="btn btn-outline hindi-audio-stop" data-audio-stop hidden>⏹ रोकें</button><span class="audio-guide-status" aria-live="polite"></span></div>
+      <article class="panel environment-hero air-hero"><div class="environment-symbol">🌬️</div><div><span class="tiny-tag">WHY IT MATTERS</span><h3>Clean air helps people and ecosystems</h3><p>Air pollution can come from transport, industry, dust and the burning of waste. Burning plastic, cables, batteries or electronic devices in the open can release dangerous smoke and pollutants. Smoke can affect nearby residents and workers, while particles can settle on land and water. Sorting waste and sending it to suitable reuse, recycling or treatment services helps avoid unsafe disposal. Trees and green spaces can provide shade and support local ecosystems, but they do not replace the need to prevent pollution at its source.</p></div></article>
+      <div class="environment-content-grid"><article class="panel"><h3>Actions for cleaner air</h3><ul class="environment-list"><li><b>Never burn waste.</b> Do not burn plastic, wires, batteries, leaves mixed with rubbish or electronics.</li><li><b>Repair and reuse.</b> Extend product life where practical instead of replacing usable equipment.</li><li><b>Use authorised e-waste channels.</b> Do not dismantle or heat electronic parts at home.</li><li><b>Reduce unnecessary trips.</b> Walk, cycle or share transport for suitable short journeys when safe.</li><li><b>Keep dust and litter controlled.</b> Store waste in suitable containers and follow local collection rules.</li></ul></article><article class="panel action-panel"><h3>Waste2Power action</h3><p>Use the E-Waste Guide to explore safer disposal choices and the Collection Route section to understand how grouped pickups may reduce unnecessary collection trips. The route displayed in this prototype is illustrative unless connected to verified live routing data.</p><div class="action-note">Small habit: choose repair or reuse where practical, and never burn waste.</div><button class="btn btn-dark" data-go="ewaste">Open E-Waste Guide →</button></article></div>
+      <p class="disclaimer">If waste is burning or producing fumes, keep away and contact the appropriate local emergency or municipal service.</p>
+    </section>
+
+    <section class="page" id="page-scan">
+      <div class="section-intro"><span class="eyebrow green-text">WASTE IDENTIFICATION</span><h2>Scan your waste</h2><p>Upload a photo, select the closest category, and save the entry to your dashboard.</p></div>
+      <div class="scan-layout">
+        <article class="panel upload-panel">
+          <div class="upload-drop" id="dropZone">
+            <div class="upload-symbol">↑</div><h3>Upload a waste photo</h3><p>Choose an image, take a photo, or drag and drop one here. JPG, PNG, or WEBP.</p>
+            <label class="btn btn-outline file-label">Choose image<input type="file" id="imageInput" accept="image/*"></label>
+            <label class="btn btn-outline file-label camera-label">📷 Take photo<input type="file" id="cameraInput" accept="image/*" capture="environment"></label>
+            <div class="preview-wrap hidden" id="previewWrap"><img id="imagePreview" alt="Waste photo preview"><button id="removeImage" class="remove-image" type="button">Remove image</button></div>
+          </div>
+          <div class="ai-box">
+            <button class="btn btn-dark wide-btn" id="aiDetectBtn" type="button" disabled>✨ Detect category with AI</button>
+            <p class="ai-status" id="aiStatus" role="status" aria-live="polite">Upload a photo first, then tap detect.</p>
+            <details class="ai-settings" id="aiSettings">
+              <summary>AI settings (Gemini API key)</summary>
+              <p>Get a free key from Google AI Studio. The key is saved only in this browser and sent only to Google. For a public launch, move this call to a backend so the key stays secret.</p>
+              <div class="ai-key-row"><input type="password" id="geminiKey" placeholder="Paste Gemini API key" autocomplete="off"><button class="btn btn-outline btn-small" id="saveKeyBtn" type="button">Save key</button><button class="btn btn-outline btn-small" id="clearKeyBtn" type="button">Remove</button></div>
+            </details>
+          </div>
+          <div class="form-grid">
+            <label>Waste category<select id="wasteCategory"><option value="Organic">Organic / Food</option><option value="Plastic">Plastic</option><option value="Paper">Paper / Cardboard</option><option value="Metal">Metal</option><option value="E-waste">E-waste / Battery</option><option value="Other">Other / Mixed</option></select></label>
+            <label id="plasticFormField" class="hidden">Plastic type<select id="plasticForm"><option value="rigid">Rigid (bottles, jugs, boxes, caps)</option><option value="film">Thin film (carry bags, sheets)</option><option value="multilayer">Multilayer (chips packets, foil pouches)</option></select></label>
+            <label>Weight (kg)<input type="number" id="wasteWeight" min="0.01" max="10000" step="0.01" value="0.5" required></label>
+            <label class="full-field">Short description<input type="text" id="wasteDescription" maxlength="80" placeholder="e.g. empty water bottle"></label>
+          </div>
+          <button class="btn btn-primary wide-btn" id="analyzeBtn">Analyze & save entry <span>→</span></button>
+          <p class="form-hint">AI detection only suggests a category from your photo. Check it and edit if needed before saving. Energy and value figures remain indicative estimates.</p>
+        </article>
+        <article class="panel result-panel">
+          <div class="panel-heading"><div><h3>Analysis result</h3><p>Result appears after you save an entry</p></div><span class="status-dot"></span></div>
+          <div class="empty-result" id="emptyResult"><div class="result-illustration">♻</div><h3>Ready when you are</h3><p>Upload a photo, choose a category, then analyze your item.</p></div>
+          <div class="result-content hidden" id="resultContent">
+            <div class="result-category"><span id="resultEmoji">🍃</span><div><small>DETECTED CATEGORY</small><h3 id="resultCategory">Organic</h3><p id="resultDescription">Food scraps</p></div></div>
+            <div class="result-metrics"><div><small>Weight</small><b id="resultWeight">0.5 kg</b></div><div><small>Indicative energy</small><b id="resultEnergy">0.2 kWh</b></div></div>
+            <div class="no-price-note hidden" id="noPriceNote" role="note">
+              <div class="np-farm hidden" id="noPriceFarm">
+                <b>🐄 Feed animals or use in the farm · जानवरों को खिलाएँ या खेत में उपयोग करें</b>
+                <p lang="en">Fresh, clean food waste that is fit to eat, such as vegetable peels, fruit scraps and leftover roti or rice, can be given to animals. Do not give spoiled, mouldy, salty, spicy or oily food, or anything with plastic. If it is not fit for animals, use it in the farm: make compost (natural manure) and mix it into the soil. It makes the soil fertile and reduces the need for chemical fertilisers.</p>
+                <p lang="hi">ताज़ा और साफ़ खाने का कचरा जो खाने योग्य हो, जैसे सब्ज़ियों के छिलके, फलों के टुकड़े और बची हुई रोटी या चावल, जानवरों को दिया जा सकता है। सड़ा-गला, फफूंद लगा, ज़्यादा नमकीन, मसालेदार या तैलीय खाना, और प्लास्टिक वाला कुछ भी जानवरों को न दें। जो कचरा जानवरों को देने लायक न हो, उसे खेत में इस्तेमाल करें: कम्पोस्ट (प्राकृतिक खाद) बनाकर मिट्टी में मिलाएँ। इससे मिट्टी उपजाऊ बनती है और रासायनिक खाद की ज़रूरत कम होती है।</p>
+              </div>
+              <div class="np-general">
+                <b>🌍 No resale price · बिक्री मूल्य नहीं</b>
+                <p lang="en">Waste that can be recycled or reused should be recycled or reused. Please do not throw it outside. Littered waste spreads pollution in our environment, and that pollution can make us sick.</p>
+                <p lang="hi">जिस कचरे को रीसायकल या दोबारा इस्तेमाल किया जा सकता है, उसे रीसायकल या दोबारा इस्तेमाल करें। कृपया उसे बाहर न फेंकें। बाहर फेंका गया कचरा हमारे पर्यावरण में प्रदूषण फैलाता है, और इस प्रदूषण से हम बीमार पड़ सकते हैं।</p>
+              </div>
+            </div>
+            <div id="priceBlock">
+            <div class="earnings-card"><div><small>ESTIMATED SELLING VALUE</small><h3 id="resultMoney">₹ 9.00</h3><p id="resultRate">Demo rate: ₹18/kg</p></div><span class="earnings-icon">₹</span></div>
+            <p class="price-disclaimer">Indicative market estimate only—not a live buyer quote or guaranteed payment. Public market listings last checked 9 Oct 2026. Actual price depends on material grade, cleanliness, quantity and pickup costs. Confirm the current rate directly with the recycler.</p>
+            <div class="rate-source-links"><b>Check current market listings (Panipat)</b><p><a href="https://scraprates.in/panipat/plastic-scrap-price" target="_blank" rel="noopener">Plastic rate & buyer listings ↗</a></p><p><a href="https://scraprates.in/panipat" target="_blank" rel="noopener">Other scrap rates (cardboard, iron, etc.) ↗</a></p><small>Rates are snapshots entered in this prototype; they do not automatically refresh. Open the links for the latest listing, then call a buyer for an actual offer.</small></div>
+            </div>
+            <div class="advice-box"><b>Recommended next step</b><p id="resultAdvice">Keep organic waste separate for composting or check local biogas collection options.</p></div>
+            <div class="success-message">✓ Entry saved to My Waste and dashboard totals.</div>
+            <button class="btn btn-outline wide-btn" data-go="waste">View my waste log →</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-waste">
+      <div class="section-intro row-between"><div><span class="eyebrow green-text">YOUR RECORDS</span><h2>My waste</h2><p>Review and manage the items recorded in this browser.</p></div><button class="btn btn-primary" data-go="scan">+ Add waste</button></div>
+      <article class="panel table-panel"><div class="table-toolbar"><div><h3>Waste log</h3><p id="tableCount">4 entries</p></div><button class="btn btn-outline btn-small" id="resetDemo">Reset sample data</button></div>
+        <div class="table-scroll"><table><thead><tr><th>Item</th><th>Category</th><th>Weight</th><th>Energy estimate</th><th>Disposal route</th><th></th></tr></thead><tbody id="wasteTable"></tbody></table></div>
+        <p class="form-hint">Entries are stored locally in this browser using localStorage. No account or cloud database is connected.</p>
+      </article>
+    </section>
+
+    <section class="page" id="page-impact">
+      <div class="section-intro"><span class="eyebrow green-text">MEASURE THE DIFFERENCE</span><h2>Energy & impact</h2><p>Explore indicative estimates based on the waste you log.</p></div>
+      <div class="impact-stats stat-grid">
+        <article class="stat-card"><div class="stat-icon icon-yellow">ϟ</div><div><span>Energy potential</span><strong id="impactEnergy">8.4 kWh</strong><small>Modelled estimate</small></div></article>
+        <article class="stat-card"><div class="stat-icon icon-green">♻</div><div><span>Waste tracked</span><strong id="impactWaste">12.5 kg</strong><small>All categories</small></div></article>
+        <article class="stat-card"><div class="stat-icon icon-mint">₹</div><div><span>Potential material value</span><strong id="impactValue">₹ 320</strong><small>Illustrative only</small></div></article>
+      </div>
+      <article class="panel chart-panel"><div class="panel-heading"><div><h3>Weight by category</h3><p>Updates when you add or delete entries</p></div><span class="tiny-tag">KG</span></div><div id="barChart" class="bar-chart"></div></article>
+      <article class="panel calc-panel">
+        <div class="panel-heading"><div><h3>What if more people join?</h3><p>Scale your logged waste mix up to a campus, society or colony</p></div><span class="tiny-tag">PROJECTION</span></div>
+        <div class="calc-grid">
+          <label>People joining<input id="calcPeople" type="number" min="1" max="1000000" step="1" value="500"></label>
+          <label>Waste sorted per person per day (kg)<input id="calcKg" type="number" min="0.01" max="5" step="0.05" value="0.2"></label>
+          <label>Active participation (%)<input id="calcPart" type="number" min="1" max="100" step="1" value="60"></label>
+        </div>
+        <div class="calc-out">
+          <div><small>Waste sorted in a year</small><strong id="calcWaste">-</strong></div>
+          <div><small>Indicative energy potential</small><strong id="calcEnergy">-</strong></div>
+          <div><small>Indicative material value</small><strong id="calcValue">-</strong></div>
+          <div><small>Same energy as</small><strong id="calcBulb">-</strong></div>
+        </div>
+        <p class="calc-note" id="calcNote">Projection only. The inputs are your own assumptions, and the energy and value per kg come from the waste you have logged. It is not a measured result.</p>
+      </article>
+      <article class="panel methodology"><h3>How estimates work</h3><p>For this prototype, each category uses a simple illustrative coefficient to demonstrate how the interface could calculate potential energy. Real-world energy recovery depends on material quality, collection method, local processing technology, and conversion efficiency. The values should be replaced with verified local data before deployment.</p></article>
+    </section>
+
+    <section class="page" id="page-route">
+      <div class="section-intro"><span class="eyebrow green-text">COLLECT SMARTER</span><h2>Collection route</h2><p>A concept view for prioritising bins and reducing unnecessary collection trips.</p></div>
+      <div class="route-layout">
+        <article class="panel route-map-panel"><div class="panel-heading"><div><h3>Panipat recycling map</h3><p>Google Maps search · current listings may vary</p></div><span class="tiny-tag">GOOGLE MAPS</span></div>
+          <div class="map-filters" role="group" aria-label="Choose what to show on the map">
+            <button class="map-chip active" type="button" data-map-q="recycling centre in Panipat Haryana">♻️ Recycling centres</button>
+            <button class="map-chip" type="button" data-map-q="scrap dealer in Panipat Haryana">🧱 Scrap dealers</button>
+            <button class="map-chip" type="button" data-map-q="e-waste recycling in Panipat Haryana">🖥️ E-waste</button>
+            <button class="map-chip" type="button" data-map-q="plastic waste recycler in Panipat Haryana">🧴 Plastic recyclers</button>
+          </div>
+          <div class="real-map-wrap"><iframe id="googleMap" title="Google Map of recycling locations in Panipat" class="real-map" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=recycling+centre+in+Panipat+Haryana&z=12&output=embed"></iframe></div>
+          <div class="map-legend"><span>🗺️ Google Maps</span><a id="googleMapOpen" href="https://www.google.com/maps/search/?api=1&query=recycling+centre+in+Panipat+Haryana" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>
+          <p class="map-note">Loads a real Google Maps search for the selected category. Results and pins are provided by Google and may change; call a business to verify it accepts your waste. This is not a live collection route, verified directory, or bin tracker. If the embedded map does not load, use “Open in Google Maps”.</p>
+        </article>
+        <article class="panel route-side"><h3>Bin status</h3><p class="muted">Example campus data</p><div class="bin-row"><span class="bin-emoji">🗑️</span><div><b>Block A — Dry waste</b><small>Needs collection</small><div class="progress"><i style="width:92%"></i></div></div><strong>92%</strong></div><div class="bin-row"><span class="bin-emoji">🍃</span><div><b>Canteen — Organic</b><small>Partially full</small><div class="progress yellow-progress"><i style="width:65%"></i></div></div><strong>65%</strong></div><div class="bin-row"><span class="bin-emoji">♻️</span><div><b>Library — Paper</b><small>Available</small><div class="progress green-progress"><i style="width:28%"></i></div></div><strong>28%</strong></div><div class="route-summary"><b>Suggested action</b><p>Prioritise Block A first, then check the canteen bin. Confirm bin status with campus staff before dispatch.</p></div></article>
+      </div>
+      <article class="panel recycler-panel">
+        <div class="panel-heading"><div><h3>Nearby recycling & scrap contacts</h3><p>Publicly listed businesses in Panipat, Haryana. Call first to confirm plastic types accepted, current buying rates, minimum quantity and pickup.</p></div><span class="tiny-tag">LOCAL DIRECTORY</span></div>
+        <div class="recycler-grid">
+          <article class="recycler-card"><span class="recycler-type">PLASTIC RECYCLING</span><h4>Aadinath Ecotex</h4><p>Kewat No. 231, Village Garh Sarnai, Panipat, Haryana 132103</p><p><b>Phone:</b> <a href="tel:+919034934011">+91 90349 34011</a></p><p><b>Email:</b> <a href="mailto:info@aadinathecotex.com">info@aadinathecotex.com</a></p><div class="recycler-actions"><a class="btn btn-primary btn-small" href="https://aadinathecotex.com/" target="_blank" rel="noopener">Official website ↗</a><a class="btn btn-outline btn-small" href="https://www.google.com/maps/search/?api=1&query=Aadinath+Ecotex+Panipat" target="_blank" rel="noopener">Map & directions ↗</a><button class="btn btn-outline btn-small" type="button" data-map-q="Aadinath Ecotex Panipat">Show on map ↑</button></div><small class="contact-note">Ask whether they buy household plastic directly or accept bulk/industrial material only.</small></article>
+          <article class="recycler-card"><span class="recycler-type">RECYCLING / WASTE MANAGEMENT</span><h4>Adinath Recyclo Tronix Pvt. Ltd. (Artronix)</h4><p>Plot #361, Industrial Estate, HSIIDC, Refinery Road, Panipat 132103</p><p><b>Phone:</b> <a href="tel:+919034933682">+91 90349 33682</a></p><p><b>Email:</b> <a href="mailto:info@artronix.in">info@artronix.in</a></p><div class="recycler-actions"><a class="btn btn-primary btn-small" href="https://www.artronix.in/contact-us/" target="_blank" rel="noopener">Official contact ↗</a><a class="btn btn-outline btn-small" href="https://www.google.com/maps/search/?api=1&query=Adinath+Recyclo+Tronix+Panipat" target="_blank" rel="noopener">Map & directions ↗</a><button class="btn btn-outline btn-small" type="button" data-map-q="Adinath Recyclo Tronix Panipat">Show on map ↑</button></div><small class="contact-note">Contact to confirm the exact plastic categories and whether they purchase from individuals.</small></article>
+          <article class="recycler-card"><span class="recycler-type">PLASTIC WASTE RECYCLER</span><h4>Exigo Recycling Pvt. Ltd.</h4><p>Opposite Kirpal Ashram, Main Barsat Road, Noorwala, Panipat, Haryana 132103</p><p><b>Phone:</b> <a href="tel:+919599218908">+91 95992 18908</a></p><p><b>Email:</b> <a href="mailto:info@exigorecycling.com">info@exigorecycling.com</a></p><div class="recycler-actions"><a class="btn btn-outline btn-small" href="https://www.google.com/maps/search/?api=1&query=Exigo+Recycling+Opposite+Kirpal+Ashram+Panipat" target="_blank" rel="noopener">Map & directions ↗</a><button class="btn btn-outline btn-small" type="button" data-map-q="Exigo Recycling Opposite Kirpal Ashram Panipat">Show on map ↑</button><a class="btn btn-outline btn-small" href="https://hspcb.gov.in/page/plastic-waste-mgt" target="_blank" rel="noopener">HSPCB information ↗</a></div><small class="contact-note">Listed by Haryana's pollution-control records as a plastic-waste recycling facility; call to confirm current operations and buying terms.</small></article>
+        </div>
+        <p class="directory-warning"><b>Before selling:</b> send a photo and ask for accepted resin types (PET/HDPE/PP etc.), minimum quantity, rate per kg, collection charges and payment method. Do not assume a recycler buys small household quantities. If you are under 18, involve a parent/guardian for visits, transport and payments.</p>
+      </article>
+      <p class="disclaimer">The map is provided by Google Maps. Contact details are from public business/official pages and can change. Verify details before visiting. Bin fill levels above are still sample data; no live sensors, GPS route optimisation or dispatch is connected.</p>
+    </section>
+
+    <section class="page" id="page-marketplace">
+      <div class="section-intro"><span class="eyebrow green-text">SELL • RECYCLE • EARN</span><h2>Waste seller marketplace</h2><p>List sorted recyclable material, estimate its value, and let potential buyers contact you. This prototype saves listings in this browser only.</p></div>
+      <div class="marketplace-layout">
+        <article class="panel">
+          <div class="panel-heading"><div><h3>List your recyclable waste</h3><p>Use a reachable contact method; do not publish your home address.</p></div><span class="tiny-tag">SELLER</span></div>
+          <form id="listingForm" class="market-form">
+            <label>Material category<select id="listingCategory" required><option value="Plastic">Plastic</option><option value="Paper">Paper / cardboard</option><option value="Metal">Metal (identify exact type in notes)</option></select></label>
+            <label id="listingPlasticField">Plastic type<select id="listingPlasticForm"><option value="rigid">Rigid (bottles, jugs, boxes, caps)</option><option value="film">Thin film (carry bags, sheets)</option><option value="multilayer">Multilayer (chips packets, foil pouches)</option></select></label>
+            <div class="form-grid"><label>Weight (kg)<input id="listingWeight" type="number" min="0.1" max="10000" step="0.1" required placeholder="e.g. 5"></label><label>Condition<select id="listingCondition"><option>Clean and sorted</option><option>Mixed / needs sorting</option><option>Compressed / bulk</option></select></label></div>
+            <label>Material details<textarea id="listingDetails" rows="3" maxlength="240" placeholder="e.g. PET bottles, dry, caps removed; pickup area (neighbourhood only)"></textarea></label>
+            <label>Contact email or phone<input id="listingContact" maxlength="100" required placeholder="Email or phone number"></label>
+            <button class="btn btn-primary" type="submit">Publish listing</button>
+            <small class="contact-note">Demo only: listings are stored in your browser, not shared online with real buyers. Avoid posting sensitive personal details.</small>
+          </form>
+        </article>
+        <article class="panel marketplace-summary"><h3>How seller earnings are estimated</h3><p>Estimated value = weight × indicative reference rate. Buyer rates vary by material grade, cleanliness, quantity and pickup cost.</p><div class="market-rate-row"><span>Plastic reference</span><b>₹14.15/kg</b></div><div class="market-rate-row"><span>Paper/cardboard reference</span><b>₹7.35/kg</b></div><div class="market-rate-row"><span>Iron scrap reference only</span><b>₹36.65/kg</b></div><p class="price-disclaimer">Illustrative market snapshots, not live buyer offers or guaranteed payment. Confirm the exact material and current price directly with a recycler.</p><a class="btn btn-outline btn-small" href="https://scraprates.in/panipat" target="_blank" rel="noopener">Check public rate listings ↗</a></article>
+      </div>
+      <div class="panel marketplace-list-panel"><div class="panel-heading"><div><h3>Compare indicative buyer offers</h3><p>Illustrative offers for demo only—not real quotes.</p></div><span class="tiny-tag">PRICE CHECK</span></div><div id="offerComparison" class="marketplace-listings"></div><p class="price-disclaimer">Compare like-for-like material grade, pickup charges, minimum quantity and payment terms before accepting an offer.</p></div>
+      <div class="panel marketplace-list-panel"><div class="panel-heading"><div><h3>Marketplace listings</h3><p>Listings saved on this device</p></div><span class="tiny-tag" id="listingCount">0 LISTINGS</span></div><div id="marketplaceListings" class="marketplace-listings"><div class="empty-market">No seller listings yet. Add your first listing using the form.</div></div></div>
+      <div class="panel marketplace-list-panel"><div class="panel-heading"><div><h3>Transaction receipt generator</h3><p>Create a demo record after agreeing on weight and rate.</p></div><span class="tiny-tag">DEMO RECEIPT</span></div><form id="receiptForm" class="market-form"><div class="form-grid"><label>Material<select id="receiptMaterial"><option>Plastic</option><option>Paper</option><option>Metal</option></select></label><label>Actual weight (kg)<input id="receiptWeight" type="number" min="0.1" step="0.1" required></label><label>Agreed rate (₹/kg)<input id="receiptRate" type="number" min="0" step="0.01" required></label><label>Buyer / recycler name<input id="receiptBuyer" maxlength="100" required></label></div><button class="btn btn-primary" type="submit">Generate receipt</button></form><div id="receiptOutput" class="hidden"></div></div>
+      <p class="directory-warning"><b>Safety & status:</b> this is a local prototype, not a live marketplace. It does not send listings to recyclers, verify buyers, arrange transport or process payments. Confirm buyer identity and final weight/rate; involve a trusted adult for in-person exchanges if you are under 18.</p>
+    </section>
+
+    <section class="page" id="page-ewaste">
+      <div class="section-intro"><span class="eyebrow green-text">DISPOSE RESPONSIBLY</span><h2>E-waste & recycling guide</h2><p>Choose the right next step for common waste types.</p></div>
+      <div class="guide-grid">
+        <article class="guide-card"><div class="guide-icon">🍌</div><span class="guide-label">ORGANIC</span><h3>Food & garden waste</h3><p>Keep food scraps separate from plastic and other dry waste. Use a composting or authorised organic-waste service if available.</p><div class="guide-action">Best route <b>Compost / local biogas</b></div></article>
+        <article class="guide-card"><div class="guide-icon">🧴</div><span class="guide-label">PLASTIC</span><h3>Bottles & packaging</h3><p>Empty and rinse containers when appropriate. Follow local recycling rules because accepted plastic types vary by facility.</p><div class="guide-action">Best route <b>Accepted recycling stream</b></div></article>
+        <article class="guide-card"><div class="guide-icon">📄</div><span class="guide-label">PAPER</span><h3>Paper & cardboard</h3><p>Keep dry and separate from food residue. Flatten boxes to reduce storage and transport volume.</p><div class="guide-action">Best route <b>Paper recycling</b></div></article>
+        <article class="guide-card"><div class="guide-icon">🥫</div><span class="guide-label">METAL</span><h3>Cans & scrap metal</h3><p>Separate clean metal items and use an appropriate scrap dealer or recycling collection point.</p><div class="guide-action">Best route <b>Metal recycler</b></div></article>
+        <article class="guide-card warning-card"><div class="guide-icon">🔋</div><span class="guide-label">SPECIAL HANDLING</span><h3>Batteries & electronics</h3><p>Do not place batteries or electronics in ordinary mixed waste. Avoid dismantling batteries; use an authorised e-waste collection point or take-back programme.</p><div class="guide-action">Best route <b>Authorised e-waste handler</b></div></article>
+        <article class="guide-card"><div class="guide-icon">🧺</div><span class="guide-label">MIXED</span><h3>Uncertain materials</h3><p>If you're unsure what an item is made from, keep it separate until you can check local disposal guidance.</p><div class="guide-action">Best route <b>Check local guidance</b></div></article>
+      </div>
+
+      <article class="panel repair-finder">
+        <div class="panel-heading"><div><span class="eyebrow green-text">SMART REPAIR & RECYCLE FINDER</span><h3>Broken device? Check the next step</h3><p>Choose your device and problem to see practical options and nearby places in Panipat.</p></div><span class="tiny-tag">LOCAL DIRECTORY</span></div>
+        <div class="finder-controls">
+          <label>What item is damaged?
+            <select id="repairDevice"><option value="mobile">Mobile phone</option><option value="laptop">Laptop / computer</option><option value="charger">Charger / cable</option><option value="battery">Battery / swollen battery</option><option value="tv">TV / home electronics</option><option value="other">Other electronic item</option></select>
+          </label>
+          <label>What is the problem?
+            <select id="repairProblem"><option value="screen">Broken screen / physical damage</option><option value="power">Not turning on</option><option value="charging">Not charging</option><option value="battery">Battery issue</option><option value="slow">Slow / software issue</option><option value="unknown">Unknown / multiple problems</option></select>
+          </label>
+          <label>Item condition
+            <select id="repairCondition"><option value="repair">Seems repairable</option><option value="old">Very old / repair may cost too much</option><option value="unsafe">Swollen, leaking, hot or physically unsafe battery</option></select>
+          </label>
+        </div>
+        <div id="repairRecommendation" class="finder-result" aria-live="polite"><b>Recommended next step:</b> Ask a repair shop for a diagnosis and written estimate before approving work. Compare repair cost with the device's value.</div>
+        <p class="price-disclaimer">This is general guidance, not an automatic technical diagnosis. A technician must inspect the item to confirm whether repair is possible and quote the price.</p>
+      </article>
+
+      <article class="panel repair-finder">
+        <div class="panel-heading"><div><h3>Repair shops near Panipat</h3><p>Call first to confirm the shop handles your device and current opening hours.</p></div><span class="tiny-tag">CONTACT FIRST</span></div>
+        <div class="local-place-grid">
+          <div class="local-place-card"><span class="place-type">MOBILE REPAIR</span><h4>Mobile Care iPhone Repairing & Unlocking</h4><p><b>Address:</b> 57, Vij Market, Sukhdev Nagar, behind Bus Stand Road, Panipat, Haryana 132103.</p><p><b>Phone:</b> +91 94160 01184</p><div class="place-actions"><a href="tel:+919416001184">Call shop</a><a href="https://www.google.com/maps/search/?api=1&query=Mobile+Care+Vij+Market+Panipat" target="_blank" rel="noopener">Map directions ↗</a></div></div>
+          <div class="local-place-card"><span class="place-type">LAPTOP REPAIR</span><h4>S.. Laptop Repairing Technician Services</h4><p><b>Address:</b> Bishan Swaroop Colony, near Deep Hotel, Panipat, Haryana 132103.</p><p><b>Phone:</b> +91 89304 03431</p><div class="place-actions"><a href="tel:+918930403431">Call shop</a><a href="https://www.google.com/maps/search/?api=1&query=S+Laptop+Repairing+near+Deep+Hotel+Panipat" target="_blank" rel="noopener">Map directions ↗</a></div></div>
+          <div class="local-place-card"><span class="place-type">CIRCUIT / ELECTRONICS</span><h4>JS Electronics and PCB Repair</h4><p><b>Address:</b> Shop 4, Sanoli Road, near Grand Trunk Road, Netaji Colony, Panipat, Haryana 132103.</p><p><b>Phone:</b> +91 85709 81385</p><div class="place-actions"><a href="tel:+918570981385">Call shop</a><a href="https://www.google.com/maps/search/?api=1&query=JS+Electronics+and+PCB+Repair+Panipat" target="_blank" rel="noopener">Map directions ↗</a></div></div>
+          <div class="local-place-card"><span class="place-type">COMPUTER / LAPTOP</span><h4>Panipat Computer Shoppee</h4><p><b>Address:</b> Shop 10, Galaxy Tower, opposite Bus Stand, Bishan Swaroop Colony, Panipat, Haryana 132103.</p><p><b>Phone:</b> +91 89303 98535</p><div class="place-actions"><a href="tel:+918930398535">Call shop</a><a href="https://www.google.com/maps/search/?api=1&query=Panipat+Computer+Shoppee+Galaxy+Tower" target="_blank" rel="noopener">Map directions ↗</a></div></div>
+        </div>
+        <p class="price-disclaimer">Directory details were found in online business listings and may change. Listings are not endorsements; confirm identity, repair warranty, parts quality and total cost before handing over a device.</p>
+      </article>
+
+      <article class="panel repair-finder">
+        <div class="panel-heading"><div><h3>E-waste recycling & collection</h3><p>If repair or safe reuse is not practical, contact an e-waste handler before dropping anything off.</p></div><span class="tiny-tag">VERIFY ACCEPTANCE</span></div>
+        <div class="local-place-grid">
+          <div class="local-place-card"><span class="place-type">E-WASTE RECYCLING</span><h4>Exigo Recycling Pvt. Ltd.</h4><p><b>Listed location:</b> Barsat Road, Cheema Enclave, Noorwala, Panipat, Haryana 132104.</p><p><b>Phone:</b> +91 96506 76997</p><div class="place-actions"><a href="tel:+919650676997">Call recycler</a><a href="https://www.google.com/maps/search/?api=1&query=Exigo+Recycling+Barsat+Road+Panipat" target="_blank" rel="noopener">Map directions ↗</a></div></div>
+          <div class="local-place-card"><span class="place-type">E-WASTE & IT EQUIPMENT</span><h4>Mahadeva Recycling / Mdeva Recycling Industries</h4><p><b>Listed address:</b> 229, New Subzi Mandi, Panipat, Haryana 132103.</p><p><b>Phone:</b> +91 87083 52543</p><div class="place-actions"><a href="tel:+918708352543">Call recycler</a><a href="https://www.google.com/maps/search/?api=1&query=Mahadeva+Recycling+New+Subzi+Mandi+Panipat" target="_blank" rel="noopener">Map directions ↗</a></div></div>
+        </div>
+        <p class="price-disclaimer"><b>Before visiting:</b> call to confirm the item is accepted, whether collection is available, any fees and the current operating address. Ask for evidence of current authorisation if needed. Never put batteries or electronics in mixed household waste.</p>
+      </article>
+    </section>
+
+    <footer class="app-footer"><span>Waste2Power • Hackathon prototype</span><span>Build small. Measure impact. Improve locally.</span></footer>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="config.js"></script>
+<script src="script.js"></script>
+<script src="auth.js" defer></script>
+</body>
+</html>
